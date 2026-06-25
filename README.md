@@ -1,3 +1,7 @@
+# 👁️ MariaVision — Object Detection & Tracking
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Try_MariaVision-6C3CE1?style=for-the-badge&logo=streamlit&logoColor=white)](https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/)
+
 <div align="center">
 
 # MariaVision
