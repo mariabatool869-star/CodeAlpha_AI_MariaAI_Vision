@@ -16,11 +16,6 @@
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8+-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-*Portfolio project for the CodeAlpha AI Internship — Task 4: Computer Vision & Deep Learning*
-
-[Live Demo](https://codealphaaimariaaivision-n3eprjsxdgrkhcqd822xxj.streamlit.app/) · [Features](#features) · [Installation](#installation) · [Documentation](#usage)
-
-</div>
 
 ---
 
@@ -58,7 +53,6 @@
 | FPS counter | Real-time performance overlay (top-left) |
 | Crowd handling | Multiple overlapping detections in dense scenes |
 
-> **Try it live:** [codealphaaimariaaivision-n3eprjsxdgrkhcqd822xxj.streamlit.app](https://codealphaaimariaaivision-n3eprjsxdgrkhcqd822xxj.streamlit.app/) — upload a video and click **Start**.
 
 ---
 
@@ -290,6 +284,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 **MariaVision** — Built for CodeAlpha AI Internship Task 4
 
-[Live Demo](https://codealphaaimariaaivision-n3eprjsxdgrkhcqd822xxj.streamlit.app/) · Computer Vision · Deep Learning · Real-Time Systems
 
 </div>
