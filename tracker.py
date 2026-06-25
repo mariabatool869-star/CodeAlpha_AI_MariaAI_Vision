@@ -1,22 +1,34 @@
-"""Deep SORT tracking module for MariaVision."""
+"""SORT-style object tracking module for MariaVision."""
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
 import cv2
 import numpy as np
-from deep_sort_realtime.deepsort_tracker import DeepSort
+from scipy.optimize import linear_sum_assignment
 
-from utils import get_track_color, is_streamlit_cloud
+from utils import get_track_color
 
 Track = List[float]  # [x1, y1, x2, y2, track_id, class_id, confidence]
 
 
+@dataclass
+class _InternalTrack:
+    track_id: int
+    bbox: Tuple[float, float, float, float]
+    class_id: int
+    confidence: float
+    hits: int = 1
+    age: int = 0
+    time_since_update: int = 0
+
+
 class ObjectTracker:
     """
-    Deep SORT tracker for multi-object tracking.
-    Handles occlusions and re-identification.
+    SORT-inspired tracker using IOU matching and Hungarian assignment.
+    Assigns persistent IDs without heavy native dependencies.
     """
 
     def __init__(
@@ -27,34 +39,23 @@ class ObjectTracker:
         max_cosine_distance: float = 0.3,
     ) -> None:
         """
-        Initialize Deep SORT tracker.
+        Initialize tracker.
 
         Args:
             max_age: Maximum frames to keep track without detection
             min_hits: Minimum detections to confirm track
             iou_threshold: IOU threshold for matching
-            max_cosine_distance: Appearance embedding distance threshold
+            max_cosine_distance: Reserved for API compatibility
         """
         self.max_age = max_age
         self.min_hits = min_hits
         self.iou_threshold = iou_threshold
+        self.max_cosine_distance = max_cosine_distance
 
-        use_cpu = is_streamlit_cloud()
-        embedder = None if use_cpu else "mobilenet"
-
-        self.tracker = DeepSort(
-            max_age=max_age,
-            n_init=min_hits,
-            max_iou_distance=1.0 - iou_threshold,
-            max_cosine_distance=max_cosine_distance,
-            embedder=embedder,
-            half=False,
-            bgr=True,
-        )
+        self._tracks: List[_InternalTrack] = []
+        self._next_id = 1
         self.track_history: Dict[int, List[Tuple[int, int]]] = {}
         self.track_colors: Dict[int, Tuple[int, int, int]] = {}
-        self._last_class_map: Dict[int, int] = {}
-        self._last_conf_map: Dict[int, float] = {}
 
     def update(self, detections: List[List[float]], frame: np.ndarray) -> List[Track]:
         """
@@ -62,36 +63,77 @@ class ObjectTracker:
 
         Args:
             detections: List of [x1, y1, x2, y2, conf, class_id]
-            frame: Current frame
+            frame: Current frame (unused, kept for API compatibility)
 
         Returns:
             List of tracks: [x1, y1, x2, y2, track_id, class_id, confidence]
         """
-        formatted = []
-        for detection in detections:
-            x1, y1, x2, y2, confidence, class_id = detection
-            width = max(1.0, x2 - x1)
-            height = max(1.0, y2 - y1)
-            class_name = str(int(class_id))
-            formatted.append(([x1, y1, width, height], confidence, class_name))
+        del frame  # Frame reserved for future appearance-based matching.
 
-        tracks = self.tracker.update_tracks(formatted, frame=frame)
+        for track in self._tracks:
+            track.age += 1
+            track.time_since_update += 1
+
+        if not detections and not self._tracks:
+            return []
+
+        det_boxes = [tuple(det[:4]) for det in detections]
+        det_meta = [(float(det[4]), int(det[5])) for det in detections]
+
+        matched_tracks: Dict[int, int] = {}
+        unmatched_dets = set(range(len(detections)))
+        unmatched_tracks = set(range(len(self._tracks)))
+
+        if self._tracks and detections:
+            iou_matrix = np.zeros((len(self._tracks), len(detections)), dtype=np.float32)
+            for t_idx, track in enumerate(self._tracks):
+                for d_idx, box in enumerate(det_boxes):
+                    iou_matrix[t_idx, d_idx] = self._compute_iou(track.bbox, box)
+
+            cost_matrix = 1.0 - iou_matrix
+            row_indices, col_indices = linear_sum_assignment(cost_matrix)
+
+            for row, col in zip(row_indices, col_indices):
+                if iou_matrix[row, col] >= self.iou_threshold:
+                    matched_tracks[row] = col
+                    unmatched_tracks.discard(row)
+                    unmatched_dets.discard(col)
+
+        for track_idx, det_idx in matched_tracks.items():
+            track = self._tracks[track_idx]
+            confidence, class_id = det_meta[det_idx]
+            track.bbox = det_boxes[det_idx]
+            track.class_id = class_id
+            track.confidence = confidence
+            track.hits += 1
+            track.time_since_update = 0
+
+        for det_idx in unmatched_dets:
+            confidence, class_id = det_meta[det_idx]
+            self._tracks.append(
+                _InternalTrack(
+                    track_id=self._next_id,
+                    bbox=det_boxes[det_idx],
+                    class_id=class_id,
+                    confidence=confidence,
+                )
+            )
+            self._next_id += 1
+
+        self._tracks = [
+            track
+            for idx, track in enumerate(self._tracks)
+            if idx in matched_tracks or track.time_since_update <= self.max_age
+        ]
+
         results: List[Track] = []
-
-        for track in tracks:
-            if not track.is_confirmed():
+        for track in self._tracks:
+            if track.hits < self.min_hits or track.time_since_update > 0:
                 continue
 
-            track_id = int(track.track_id)
-            left, top, right, bottom = map(int, track.to_ltrb())
-
-            class_id = self._resolve_class_id(track, detections)
-            confidence = self._resolve_confidence(track_id, detections, left, top, right, bottom)
-
-            self._last_class_map[track_id] = class_id
-            self._last_conf_map[track_id] = confidence
-
-            center = ((left + right) // 2, (bottom + top) // 2)
+            x1, y1, x2, y2 = track.bbox
+            track_id = track.track_id
+            center = (int((x1 + x2) / 2), int((y1 + y2) / 2))
             history = self.track_history.setdefault(track_id, [])
             history.append(center)
             if len(history) > 30:
@@ -100,46 +142,11 @@ class ObjectTracker:
             if track_id not in self.track_colors:
                 self.track_colors[track_id] = get_track_color(track_id)
 
-            results.append([left, top, right, bottom, track_id, class_id, confidence])
+            results.append(
+                [x1, y1, x2, y2, track_id, track.class_id, track.confidence]
+            )
 
         return results
-
-    def _resolve_class_id(self, track, detections: List[List[float]]) -> int:
-        """Match a track to the closest detection for class ID."""
-        left, top, right, bottom = map(int, track.to_ltrb())
-        best_class = self._last_class_map.get(int(track.track_id), 0)
-        best_iou = 0.0
-
-        for detection in detections:
-            x1, y1, x2, y2, _, class_id = detection
-            iou = self._compute_iou((left, top, right, bottom), (x1, y1, x2, y2))
-            if iou > best_iou:
-                best_iou = iou
-                best_class = int(class_id)
-
-        return best_class
-
-    def _resolve_confidence(
-        self,
-        track_id: int,
-        detections: List[List[float]],
-        left: int,
-        top: int,
-        right: int,
-        bottom: int,
-    ) -> float:
-        """Match a track to the closest detection for confidence score."""
-        best_conf = self._last_conf_map.get(track_id, 0.0)
-        best_iou = 0.0
-
-        for detection in detections:
-            x1, y1, x2, y2, confidence, _ = detection
-            iou = self._compute_iou((left, top, right, bottom), (x1, y1, x2, y2))
-            if iou > best_iou:
-                best_iou = iou
-                best_conf = float(confidence)
-
-        return best_conf
 
     @staticmethod
     def _compute_iou(
@@ -193,18 +200,7 @@ class ObjectTracker:
 
     def reset(self) -> None:
         """Reset tracker state."""
-        use_cpu = is_streamlit_cloud()
-        embedder = None if use_cpu else "mobilenet"
-
-        self.tracker = DeepSort(
-            max_age=self.max_age,
-            n_init=self.min_hits,
-            max_iou_distance=1.0 - self.iou_threshold,
-            embedder=embedder,
-            half=False,
-            bgr=True,
-        )
+        self._tracks.clear()
+        self._next_id = 1
         self.track_history.clear()
         self.track_colors.clear()
-        self._last_class_map.clear()
-        self._last_conf_map.clear()

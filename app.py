@@ -2,16 +2,7 @@
 
 from __future__ import annotations
 
-import sys
 import time
-
-try:
-    import lap  # noqa: F401
-except ImportError:
-    import lapx as lap
-
-    sys.modules["lap"] = lap
-
 from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple

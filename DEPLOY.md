@@ -5,7 +5,7 @@
 | File | Purpose |
 |------|---------|
 | `app.py` | Main entry point |
-| `requirements.txt` | Python deps (`opencv-python-headless`, CPU PyTorch) |
+| `requirements.txt` | Minimal Python deps (no `lap` / `torch` pins) |
 | `.python-version` | Pins Python **3.11** |
 | `packages.txt` | Linux system libraries for OpenCV |
 | `.streamlit/config.toml` | Headless server settings |

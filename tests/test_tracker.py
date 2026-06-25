@@ -16,7 +16,7 @@ def tracker() -> ObjectTracker:
 
 def test_tracker_initialization(tracker: ObjectTracker) -> None:
     """Tracker should initialize with empty history."""
-    assert tracker.tracker is not None
+    assert tracker._tracks == []
     assert tracker.track_history == {}
     assert tracker.track_colors == {}
 
