@@ -1,0 +1,28 @@
+model:
+  name: yolov8n.pt
+  confidence: 0.5
+  device: auto  # auto, cpu, or cuda
+
+tracker:
+  max_age: 30
+  min_hits: 3
+  iou_threshold: 0.3
+  max_cosine_distance: 0.3
+
+video:
+  source: 0
+  width: 640
+  height: 480
+  fps: 30
+
+display:
+  show_labels: true
+  show_tracking: true
+  show_trajectory: false
+  show_confidence: true
+  line_thickness: 2
+
+paths:
+  input_dir: data/input
+  output_dir: data/output
+  cache_dir: data/cache
