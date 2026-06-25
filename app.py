@@ -1,3 +1,30 @@
+# LINE 1: This is where the code goes!
+import subprocess
+import sys
+
+def install_missing_packages():
+    packages = [
+        "scipy==1.11.4",
+        "filterpy==1.4.5", 
+        "lap==0.4.0",
+        "PyYAML==6.0.1",
+        "pillow==10.1.0"
+    ]
+    for pkg in packages:
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", pkg])
+        except:
+            pass
+
+install_missing_packages()
+
+# LINE 15-ish: Now your regular imports
+import streamlit as st
+import cv2
+import numpy as np
+from ultralytics import YOLO
+
+# ... rest of your code continues
 """Main application controller and Streamlit UI for MariaVision."""
 
 from __future__ import annotations
