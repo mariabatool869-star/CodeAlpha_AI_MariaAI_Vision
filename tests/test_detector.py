@@ -11,12 +11,13 @@ from detector import ObjectDetector
 @pytest.fixture(scope="module")
 def detector() -> ObjectDetector:
     """Create a lightweight detector for testing."""
-    return ObjectDetector(model_name="yolov8n.pt", conf_threshold=0.25, device="cpu")
+    return ObjectDetector(model_name="yolov8n.onnx", conf_threshold=0.25, device="cpu")
 
 
 def test_detector_initialization(detector: ObjectDetector) -> None:
     """Detector should load model and expose COCO class names."""
-    assert detector.model is not None
+    assert detector.backend == "onnx"
+    assert detector.session is not None
     assert len(detector.classes) > 0
     assert detector.conf_threshold == 0.25
 

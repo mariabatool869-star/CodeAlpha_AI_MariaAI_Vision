@@ -1,5 +1,5 @@
 model:
-  name: yolov8n.pt
+  name: yolov8n.onnx
   confidence: 0.5
   device: auto  # auto, cpu, or cuda
 

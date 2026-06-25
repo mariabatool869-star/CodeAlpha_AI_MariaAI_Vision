@@ -46,6 +46,8 @@ models/weights/*
 !models/weights/.gitkeep
 *.pt
 !yolov8n.pt
+*.onnx
+!yolov8n.onnx
 
 # Streamlit secrets only (keep config.toml for deployment)
 .streamlit/secrets.toml

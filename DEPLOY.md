@@ -1,46 +1,38 @@
 # Streamlit Cloud Deployment
 
-## Required files (included in this repo)
+## Why ONNX?
+
+Streamlit Cloud free tier often **fails to install PyTorch + Ultralytics** (~1GB+).
+MariaVision uses **ONNX Runtime** on cloud (~50MB) with a pre-exported `yolov8n.onnx`.
+
+## Required files
 
 | File | Purpose |
 |------|---------|
-| `app.py` | Main entry point |
-| `requirements.txt` | Minimal Python deps (no `lap` / `torch` pins) |
-| `.python-version` | Pins Python **3.11** |
-| `packages.txt` | **Only** `libgl1` (do not add `libglib2.0-0` — breaks on Cloud) |
-| `.streamlit/config.toml` | Headless server settings |
+| `app.py` | Streamlit entry point |
+| `requirements.txt` | Lightweight cloud deps (no torch) |
+| `yolov8n.onnx` | Pre-exported YOLOv8 nano model |
+| `.python-version` | Python 3.11 |
+| `.streamlit/config.toml` | Server settings |
 
-## Deploy steps
+**Do not add `packages.txt`** unless OpenCV import fails at runtime (then add only `libgl1`).
 
-1. Push this folder to GitHub (see commands below).
-2. Open [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-3. Click **Create app** → select your repo → set main file to `app.py`.
-4. Click **Deploy** and wait 5–15 minutes for the first build.
-
-## Push to GitHub
+## Local development with .pt models
 
 ```bash
-cd c:\Users\Maria\Desktop\MariaAI-Vision
-git init
-git add .
-git commit -m "Fix Streamlit Cloud deployment"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git push -u origin main
+pip install -r requirements.txt -r requirements-dev.txt
 ```
 
-If the app already exists on Streamlit Cloud, push to `main` and click **Reboot app**.
+## Deploy
 
-## Cloud limitations
+1. Push to GitHub (`master` or `main` branch).
+2. Connect repo at [share.streamlit.io](https://share.streamlit.io).
+3. Set main file: `app.py`.
+4. Set branch to match your repo (`master` or `main`).
+5. Reboot app after each push.
 
-- **No webcam** — use **Upload Video** only.
-- **CPU only** — use `yolov8n.pt` for best performance.
-- **First Start** — models download on first run (can take 1–2 minutes).
+## Cloud usage
 
-## Troubleshooting
-
-| Error | Fix |
-|-------|-----|
-| `ImportError: cv2` | Ensure `.python-version`, `packages.txt`, and `opencv-python-headless` are committed |
-| App won't start | Check logs in **Manage app** on Streamlit Cloud |
-| Out of memory | Use `yolov8n.pt` only; avoid large models on cloud |
+- Use **Upload Video** only (no webcam).
+- Model: **yolov8n.onnx** (automatic on cloud).
+- First **Start** loads the ONNX model in seconds.

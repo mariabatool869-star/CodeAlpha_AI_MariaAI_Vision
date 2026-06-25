@@ -354,9 +354,10 @@ def main() -> None:
             uploaded_file = st.file_uploader("Upload Video", type=["mp4", "avi", "mov", "mkv"])
 
         st.markdown("---")
-        model_options = ["yolov8n.pt", "yolov8s.pt"]
-        if not is_streamlit_cloud():
-            model_options.extend(["yolov8m.pt", "yolov8l.pt"])
+        if is_streamlit_cloud():
+            model_options = ["yolov8n.onnx"]
+        else:
+            model_options = ["yolov8n.onnx", "yolov8n.pt", "yolov8s.pt", "yolov8m.pt", "yolov8l.pt"]
         selected_model = st.selectbox("Model", model_options, index=0)
         confidence = st.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
 
