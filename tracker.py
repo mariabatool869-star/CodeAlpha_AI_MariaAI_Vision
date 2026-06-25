@@ -7,7 +7,6 @@ from typing import Dict, List, Optional, Tuple
 
 import cv2
 import numpy as np
-from scipy.optimize import linear_sum_assignment
 
 from utils import get_track_color
 
@@ -27,7 +26,7 @@ class _InternalTrack:
 
 class ObjectTracker:
     """
-    SORT-inspired tracker using IOU matching and Hungarian assignment.
+    SORT-inspired tracker using greedy IOU matching.
     Assigns persistent IDs without heavy native dependencies.
     """
 
@@ -85,19 +84,24 @@ class ObjectTracker:
         unmatched_tracks = set(range(len(self._tracks)))
 
         if self._tracks and detections:
-            iou_matrix = np.zeros((len(self._tracks), len(detections)), dtype=np.float32)
+            pairs: List[Tuple[float, int, int]] = []
             for t_idx, track in enumerate(self._tracks):
                 for d_idx, box in enumerate(det_boxes):
-                    iou_matrix[t_idx, d_idx] = self._compute_iou(track.bbox, box)
+                    iou = self._compute_iou(track.bbox, box)
+                    if iou >= self.iou_threshold:
+                        pairs.append((iou, t_idx, d_idx))
 
-            cost_matrix = 1.0 - iou_matrix
-            row_indices, col_indices = linear_sum_assignment(cost_matrix)
-
-            for row, col in zip(row_indices, col_indices):
-                if iou_matrix[row, col] >= self.iou_threshold:
-                    matched_tracks[row] = col
-                    unmatched_tracks.discard(row)
-                    unmatched_dets.discard(col)
+            pairs.sort(reverse=True)
+            used_tracks: set[int] = set()
+            used_dets: set[int] = set()
+            for _, t_idx, d_idx in pairs:
+                if t_idx in used_tracks or d_idx in used_dets:
+                    continue
+                matched_tracks[t_idx] = d_idx
+                used_tracks.add(t_idx)
+                used_dets.add(d_idx)
+                unmatched_tracks.discard(t_idx)
+                unmatched_dets.discard(d_idx)
 
         for track_idx, det_idx in matched_tracks.items():
             track = self._tracks[track_idx]

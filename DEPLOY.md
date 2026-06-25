@@ -7,7 +7,7 @@
 | `app.py` | Main entry point |
 | `requirements.txt` | Minimal Python deps (no `lap` / `torch` pins) |
 | `.python-version` | Pins Python **3.11** |
-| `packages.txt` | Linux system libraries for OpenCV |
+| `packages.txt` | **Only** `libgl1` (do not add `libglib2.0-0` — breaks on Cloud) |
 | `.streamlit/config.toml` | Headless server settings |
 
 ## Deploy steps
