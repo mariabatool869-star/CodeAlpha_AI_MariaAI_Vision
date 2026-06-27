@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-00FFFF?style=for-the-badge)](https://ultralytics.com/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8+-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](LICENSE)
 
 *Portfolio project — CodeAlpha AI Internship · Task 4: Computer Vision & Deep Learning*
 
@@ -333,7 +333,11 @@ docker run -p 8501:8501 mariavision
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is **proprietary**. All rights reserved by **Maria**.
+
+You may **not** use, copy, modify, distribute, or collaborate on this project unless Maria has given you **explicit written permission**. See the [LICENSE](LICENSE) file for full terms.
+
+To request permission, open an issue or contact Maria via the [GitHub repository](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision).
 
 ---
 
@@ -350,3 +354,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 [Live Demo](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) · [GitHub](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision)
 
 </div>
+
