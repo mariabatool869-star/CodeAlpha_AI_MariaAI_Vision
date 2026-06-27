@@ -342,7 +342,7 @@ docker run -p 8501:8501 mariavision
 
 **Online demo — you may not:** download source code, modify the app, reverse engineer, or use offline.
 
-**Source code access:** Email **maria.ai@example.com** or see the full [LICENSE](LICENSE) for request steps, terms, and FAQ.
+**Source code access:** Email **mariabatool869@gmail.com** or see the full [LICENSE](LICENSE) for request steps, terms, and FAQ.
 
 ---
 
