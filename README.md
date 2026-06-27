@@ -333,11 +333,16 @@ docker run -p 8501:8501 mariavision
 
 ## 📄 License
 
-This project is **proprietary**. All rights reserved by **Maria**.
+**Proprietary — All Rights Reserved © 2026 Maria**
 
-You may **not** use, copy, modify, distribute, or collaborate on this project unless Maria has given you **explicit written permission**. See the [LICENSE](LICENSE) file for full terms.
+| Access Type | What You Can Do |
+|-------------|-----------------|
+| **Online Demo** | Upload videos, detect & track objects, export results, view stats — [Try it live](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) |
+| **Source Code** | Requires **written permission** from Maria |
 
-To request permission, open an issue or contact Maria via the [GitHub repository](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision).
+**Online demo — you may not:** download source code, modify the app, reverse engineer, or use offline.
+
+**Source code access:** Email **maria.ai@example.com** or see the full [LICENSE](LICENSE) for request steps, terms, and FAQ.
 
 ---
 
@@ -354,4 +359,5 @@ To request permission, open an issue or contact Maria via the [GitHub repository
 [Live Demo](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) · [GitHub](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision)
 
 </div>
+
 
