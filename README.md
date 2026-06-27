@@ -4,7 +4,7 @@
 
 **Real-time object detection and multi-object tracking powered by YOLOv8**
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Try_MariaVision-6C3CE1?style=for-the-badge&logo=streamlit&logoColor=white)](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Try_MariaVision-6C3CE1?style=for-the-badge&logo=streamlit&logoColor=white)](https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-00FFFF?style=for-the-badge)](https://ultralytics.com/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8+-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
@@ -12,7 +12,7 @@
 
 *Portfolio project — CodeAlpha AI Internship · Task 4: Computer Vision & Deep Learning*
 
-[Live Demo](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) · [Features](#-key-features) · [Installation](#-installation) · [Usage](#-usage-guide)
+[Live Demo](https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/) · [Features](#-key-features) · [Installation](#-installation) · [Usage](#-usage-guide)
 
 </div>
 
@@ -299,7 +299,7 @@ python -m pytest tests/test_tracker.py -v
 
 ### Streamlit Cloud (Recommended)
 
-**Live Demo:** https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/
+**Live Demo:** https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/
 
 1. Push repository to GitHub
 2. Connect at [share.streamlit.io](https://share.streamlit.io)
@@ -337,12 +337,12 @@ docker run -p 8501:8501 mariavision
 
 | Access Type | What You Can Do |
 |-------------|-----------------|
-| **Online Demo** | Upload videos, detect & track objects, export results, view stats — [Try it live](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) |
+| **Online Demo** | Upload videos, detect & track objects, export results, view stats — [Try it live](https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/) |
 | **Source Code** | Requires **written permission** from Maria |
 
 **Online demo — you may not:** download source code, modify the app, reverse engineer, or use offline.
 
-**Source code access:** Email **mariabatool869@gmail.com** or see the full [LICENSE](LICENSE) for request steps, terms, and FAQ.
+**Source code access:** Email **maria.ai@example.com** or see the full [LICENSE](LICENSE) for request steps, terms, and FAQ.
 
 ---
 
@@ -356,7 +356,7 @@ docker run -p 8501:8501 mariavision
 
 **MariaVision** — Intelligent Vision for Tomorrow's Applications
 
-[Live Demo](https://codealphaaimariaaivision-n7tX5r5c3hhnaejrc8msi.streamlit.app/) · [GitHub](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision)
+[Live Demo](https://codealphaaimariaaivision-nct7x5r5c3hhnaejrc8msi.streamlit.app/) · [GitHub](https://github.com/mariabatool869-star/CodeAlpha_AI_MariaAI_Vision)
 
 </div>
 
